@@ -9,16 +9,27 @@
 
 - name: disable default mysql 8.0 upstream repository
   yum_repository:
+    file: mysql-community
     name: mysql80-community
-    description: MySQL 8.0 Community Server - Source
-    baseurl: "http://repo.mysql.com/yum/mysql-8.0-community/el/7/SRPMS"
+    description: MySQL 8.0 Community Server
+    baseurl: "http://repo.mysql.com/yum/mysql-8.0-community/el/7/$basearch/"
     enabled: no
+    gpgcheck: 1
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysqlq
   when: mysql_upstream_version != '8.0'
 
 - name: enable relevant mysql upstream repository for specified version
   yum_repository:
+    file: mysql-community
     name: "mysql{{ mysql_upstream_version | replace('.', '') }}-community"
-    description: "MySQL {{ mysql_upstream_version }} Community Server - Source"
-    baseurl: "http://repo.mysql.com/yum/mysql-{{ mysql_upstream_version }}-community/el/7/SRPMS"
+    description: "MySQL {{ mysql_upstream_version }} Community Server"
+    baseurl: "http://repo.mysql.com/yum/mysql-{{ mysql_upstream_version }}-community/el/7/$basearch/"
     enabled: yes
+    gpgcheck: 1
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
   when: mysql_upstream_version != '8.0'
+
+- name: yum clean metadata
+  command: yum clean metadata
+  args:
+    warn: no
