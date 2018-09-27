@@ -5,4 +5,4 @@
 
 - name: ensure mysql upstream repository is installed
   package:
-    name: "http://dev.mysql.com/get/mysql{{ mysql_upstream_version | replace('.', '') }}-community-release-{{ mysql_upstream_dist }}-9.noarch.rpm"
+    name: "http://dev.mysql.com/get/mysql{{ mysql_upstream_version | replace('.', '') }}-community-release-{{ mysql_upstream_dist }}-1.noarch.rpm"
