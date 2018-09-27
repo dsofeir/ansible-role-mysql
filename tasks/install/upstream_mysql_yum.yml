@@ -5,4 +5,20 @@
 
 - name: ensure mysql upstream repository is installed
   package:
-    name: "http://dev.mysql.com/get/mysql{{ mysql_upstream_version | replace('.', '') }}-community-release-{{ mysql_upstream_dist }}-1.noarch.rpm"
+    name: "http://dev.mysql.com/get/mysql80-community-release-{{ mysql_upstream_dist }}-1.noarch.rpm"
+
+- name: disable default mysql 8.0 upstream repository
+  yum_repository:
+    name: mysql80-community
+    description: MySQL 8.0 Community Server - Source
+    baseurl: "http://repo.mysql.com/yum/mysql-8.0-community/el/7/SRPMS"
+    enabled: no
+  when: mysql_upstream_version != '8.0'
+
+- name: enable relevant mysql upstream repository for specified version
+  yum_repository:
+    name: "mysql{{ mysql_upstream_version | replace('.', '') }}-community"
+    description: "MySQL {{ mysql_upstream_version }} Community Server - Source"
+    baseurl: "http://repo.mysql.com/yum/mysql-{{ mysql_upstream_version }}-community/el/7/SRPMS"
+    enabled: yes
+  when: mysql_upstream_version != '8.0'
